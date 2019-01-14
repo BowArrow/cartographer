@@ -6,6 +6,7 @@
   "dependencies": {
     "discord.js": "^11.4.2",
     "dotenv": "^6.2.0",
+    "leaflet": "^1.4.0",
     "mkdirp": "^0.5.1",
     "winston": "^3.1.0"
   },
