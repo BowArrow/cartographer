@@ -149,10 +149,10 @@ client.on("message", message => {
             case "carto":
             case "commands":
             case "cmds":
-                getCommands(message.author.username, message.author.avatarURL, commandsList);
+                message.author.send(getCommands(message.author.username, message.author.avatarURL, commandsList));
             break;
             case "grid":
-                message.author.send(getMapEmbed(args.toString(), message.author.username, message.author.avatarURL, mapping.grid, mapping.info.tile))
+                message.author.send(getMapEmbed("the grid", message.author.username, message.author.avatarURL, mapping.grid, mapping.info.tile))
             break;
         }
     }
