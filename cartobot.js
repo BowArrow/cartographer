@@ -46,9 +46,14 @@ const mapping = {
         three: "https://cdn.discordapp.com/attachments/534425436050948096/534425803128045590/row-3-col-5.png",
         four: "https://cdn.discordapp.com/attachments/534425436050948096/534425932644220959/row-4-col-5.png",
         five: "https://cdn.discordapp.com/attachments/534425436050948096/534426022595264559/row-5-col-5.png"
-    }
+    },
+    info: {
+        fullmap: "If you need a closer view use ^enhance [tilenumber]\n ex: ^enhance a1",
+        tile: "If you need a full view of the map use ^fullmap"
+    },
+    grid: "https://cdn.discordapp.com/attachments/534425436050948096/535289888141082635/fullmapGrid.png"
 }
-function getMapEmbed(title, author, authorIcon, mapImage) {
+function getMapEmbed(title, author, authorIcon, mapImage, authorMessage) {
     const embed = new Discord.RichEmbed()
       .setTitle("Here is your map of " + title + ":")
       .setAuthor(author, authorIcon)
@@ -56,7 +61,7 @@ function getMapEmbed(title, author, authorIcon, mapImage) {
        * Alternatively, use "#00AE86", [0, 174, 134] or an integer number.
        */
       .setColor(0x00AE86)
-      .setDescription("If you need a closer view use !enhance [tilenumber]\n ex: !enhance a1")
+      .setDescription(authorMessage)
       .setFooter("Have a nice day!")
       .setImage(mapImage)
       .setThumbnail("https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/FraMauroDetailedMap.jpg/310px-FraMauroDetailedMap.jpg")
@@ -68,6 +73,28 @@ function getMapEmbed(title, author, authorIcon, mapImage) {
       .setURL("http://181.215.47.51:58268/")
       return embed;
 }
+function getCommands(author, authorIcon, message){
+const commandsEmbed = new Discord.RichEmbed()
+    .setTitle("Here is a list of my commands:")
+    .setAuthor(author, authorIcon)
+    .setColor(0x00AE86)
+    .setDescription(message)
+    .setThumbnail("https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/FraMauroDetailedMap.jpg/310px-FraMauroDetailedMap.jpg")
+    .setTimestamp()
+    .addField("Link to the live map!", "http://181.215.47.51:58268/")
+    return commandsEmbed
+}
+
+const commandsList = [
+    "Use '^' to call the bot.",
+    "ex. ^[Command Word] ^map",
+    "Command words:",
+    "fullmap/map: Give the user the full map of the server.",
+    "enhance/e[tilename]: Give an enhanced view of a specific tile.",
+    "ex. ^enhance a1",
+    "grid: shows a map with grid overlay.",
+    "h/help/carto/commands/cmds: shows this list."
+].join("\n")
  
 
 client.on("message", message => {
@@ -78,9 +105,11 @@ client.on("message", message => {
         args = args.splice(1);
 
         switch (cmd){
+            case "map":
             case "fullmap":
-            message.author.send(getMapEmbed("the World", message.author.username, message.author.avatarURL, mapping.fullmap))
+            message.author.send(getMapEmbed("the World", message.author.username, message.author.avatarURL, mapping.fullmap, mapping.info.fullmap))
             break;
+            case "e":
             case "enhance":
             // console.log(args)
             if(args[0] != null){
@@ -91,7 +120,7 @@ client.on("message", message => {
                 number = numberSwitch(number);
                 var finalTile = mapping[`${letter}`][`${number}`];
                 // console.log(letter + number);
-                message.author.send(getMapEmbed(args[0].toString(), message.author.username, message.author.avatarURL, finalTile))
+                message.author.send(getMapEmbed(args[0].toString(), message.author.username, message.author.avatarURL, finalTile, mapping.info.tile))
                 function numberSwitch(arg){
                     switch(arg){
                         case "1":
@@ -114,6 +143,17 @@ client.on("message", message => {
             } else {
                 message.author.send("Please enter your tile number! ex. a1")
             }
+            break;
+            case "h":
+            case "help":
+            case "carto":
+            case "commands":
+            case "cmds":
+                getCommands(message.author.username, message.author.avatarURL, commandsList);
+            break;
+            case "grid":
+                message.author.send(getMapEmbed(args[0].toString(), message.author.username, message.author.avatarURL, mapping.grid, mapping.info.tile))
+            break;
         }
     }
 });
