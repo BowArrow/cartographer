@@ -152,7 +152,7 @@ client.on("message", message => {
                 getCommands(message.author.username, message.author.avatarURL, commandsList);
             break;
             case "grid":
-                message.author.send(getMapEmbed(args[0].toString(), message.author.username, message.author.avatarURL, mapping.grid, mapping.info.tile))
+                message.author.send(getMapEmbed(args.toString(), message.author.username, message.author.avatarURL, mapping.grid, mapping.info.tile))
             break;
         }
     }
